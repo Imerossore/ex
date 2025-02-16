@@ -25,7 +25,7 @@ export const addName = async (
   }
 };
 
-export const getNames = async (): Promise<any> => {
+export const getNames = async (): Promise<{ id: number; name: string }[]> => {
   try {
     const result = await pool.query('SELECT * FROM "User"');
     return result.rows;
