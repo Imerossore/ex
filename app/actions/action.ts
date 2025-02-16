@@ -1,36 +1,27 @@
 "use server";
 
-import pool from "@/lib/db";
-import { revalidatePath } from "next/cache";
+import { supabase } from "../../lib/supabase";
 
-export const addName = async (
-  prevState: { message?: string },
-  formData: FormData
-): Promise<{ message?: string }> => {
-  const name = formData.get("name");
+export const addUser = async (prevState: any, formdata: FormData) => {
+  const name = formdata.get("name") as string;
 
-  if (!name || typeof name !== "string") {
-    return { message: "Please enter a valid name." };
+  const { data, error } = await supabase.from("users").insert([{ name }]);
+
+  if (error) {
+    console.error("Supabase Error:", error);
+    return { error: error.message };
   }
 
-  try {
-    await pool.query('INSERT INTO "User"(name) VALUES ($1)', [name]);
-
-    revalidatePath("/");
-
-    return { message: `Hello, ${name}!` };
-  } catch (error) {
-    console.error("Database error:", error);
-    return { message: "Failed to add name." };
-  }
+  return { message: "User added successfully!", data };
 };
 
-export const getNames = async (): Promise<{ id: number; name: string }[]> => {
-  try {
-    const result = await pool.query('SELECT * FROM "User"');
-    return result.rows;
-  } catch (error) {
-    console.error("Database error:", error);
+export async function getUsers() {
+  const { data, error } = await supabase.from("users").select("*");
+
+  if (error) {
+    console.error("Error fetching users:", error.message);
     return [];
   }
-};
+
+  return data;
+}
