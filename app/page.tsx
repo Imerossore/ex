@@ -1,17 +1,14 @@
-import { getUsers } from "./actions/action";
-import Form from "./components/Form";
+import MessageContainer from "./components/MessageContainer";
+import SendMessageForm from "./components/SendMessageForm";
 
-export default async function Home() {
-  const user = await getUsers();
-
+export default function Page() {
   return (
-    <div className="bg-slate-900 h-[100vh] flex justify-center items-center flex-col">
-      <Form />
-      {user.map((user: { id: number; name: string }) => (
-        <div key={user.id} className="text-white flex flex-col justify-center">
-          {user.name}
-        </div>
-      ))}
+    <div className="h-[100vh] flex flex-col items-center pt-28">
+      <h1 className="text-3xl font-semibold">Global chat</h1>
+      <div className="w-80 border border-slate-400 rounded-md p-3 flex flex-col gap-2">
+        <MessageContainer />
+        <SendMessageForm />
+      </div>
     </div>
   );
 }
