@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { motion } from "framer-motion";
 
 interface Message {
   id: string;
   text: string;
+  sender: string;
   created_at: string;
 }
 
@@ -43,19 +45,30 @@ export default function MessageContainer() {
     };
   }, []);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <div className="h-96 w-full border border-black overflow-y-auto p-4 flex flex-col gap-2">
+    <div className="h-96 w-full border border-gray-300 rounded-lg shadow-md overflow-y-auto p-4 flex flex-col gap-2 bg-gray-100">
       {messages.map((msg) => (
-        <div
+        <motion.div
           key={msg.id}
-          className="self-start max-w-xs bg-white p-3 rounded-lg shadow-md "
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className={`p-3 max-w-xs rounded-lg shadow-md text-sm ${
+            msg.sender === "User1"
+              ? "bg-blue-500 text-white self-end"
+              : "bg-white text-gray-800 self-start"
+          }`}
         >
-          <p className="text-sm text-gray-800 text-wrap">{msg.text}</p>
-        </div>
+          {msg.text}
+        </motion.div>
       ))}
       <div ref={messagesEndRef} />
     </div>
