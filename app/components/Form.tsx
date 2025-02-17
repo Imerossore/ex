@@ -12,8 +12,7 @@ export default function AddUserForm() {
       <button type="submit" disabled={isPending} className="bg-green-500">
         Submit
       </button>
-      {state?.error && <p style={{ color: "red" }}>{state.error}</p>}
-      {state?.message && <p style={{ color: "green" }}>{state.message}</p>}
+      {state?.success && <p style={{ color: "red" }}>{state.error}</p>}
     </form>
   );
 }

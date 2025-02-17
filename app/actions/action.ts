@@ -1,19 +1,20 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { supabase } from "../../lib/supabase";
 
-export const addUser = async (prevState: any, formdata: FormData) => {
-  const name = formdata.get("name") as string;
+export async function addUser(prevState: unknown, formData: FormData) {
+  const name = formData.get("name") as string;
 
-  const { data, error } = await supabase.from("users").insert([{ name }]);
+  const { error } = await supabase.from("users").insert([{ name }]);
 
   if (error) {
-    console.error("Supabase Error:", error);
-    return { error: error.message };
+    return { error: "Failed to add user" };
   }
+  revalidatePath("/");
 
-  return { message: "User added successfully!", data };
-};
+  return { success: "User added successfully" };
+}
 
 export async function getUsers() {
   const { data, error } = await supabase.from("users").select("*");
