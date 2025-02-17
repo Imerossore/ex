@@ -5,7 +5,7 @@ import { useActionState } from "react";
 import { sendMessage } from "../actions/message";
 
 export default function SendMessageForm() {
-  const [state, action, pending] = useActionState(sendMessage, null);
+  const [, action, pending] = useActionState(sendMessage, null);
 
   return (
     <form action={action} className="flex gap-2 px-2">
