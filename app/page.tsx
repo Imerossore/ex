@@ -7,7 +7,7 @@ export default async function Home() {
   return (
     <div className="bg-slate-900 h-[100vh] flex justify-center items-center flex-col">
       <Form />
-      {user.map((user: any) => (
+      {user.map((user: { id: number; name: string }) => (
         <div key={user.id} className="text-white flex flex-col justify-center">
           {user.name}
         </div>
