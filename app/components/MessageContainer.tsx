@@ -92,11 +92,11 @@ export default function MessageContainer({ user }: UserProps) {
           transition={{ duration: 0.3 }}
           className={`p-3 max-w-xs rounded-lg shadow-md text-sm ${
             msg.user_Id === user?.id
-              ? "bg-blue-500 text-white self-end"
-              : "bg-white text-gray-800 self-start"
+              ? "bg-blue-500 text-white self-end "
+              : "bg-white text-gray-800 self-start "
           }`}
         >
-          <p className="text-xs font-bold text-slate-50 ">
+          <p className={`text-xs font-bold `}>
             {msg.user_Id === user?.id
               ? "You"
               : usernames[msg.user_Id] || "Unknown"}
