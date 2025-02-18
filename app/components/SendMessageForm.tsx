@@ -1,6 +1,6 @@
 "use client";
 
-import { Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 import { useActionState } from "react";
 import { sendMessage } from "../actions/message";
 import { useState, useRef } from "react";
@@ -10,8 +10,10 @@ interface UserProps {
 }
 
 export default function SendMessageForm({ user }: UserProps) {
-  const [, action, isPending] = useActionState(sendMessage, null);
+  const [, action] = useActionState(sendMessage, null);
+
   const [text, setText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -23,8 +25,16 @@ export default function SendMessageForm({ user }: UserProps) {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    await sendMessage(null, new FormData(e.currentTarget));
+    setText("");
+    setIsLoading(false);
+  };
+
   return (
-    <form action={action} className="flex items-end gap-1 w-full">
+    <form onSubmit={handleSubmit} className="flex items-end gap-1 w-full">
       <input type="hidden" name="user_Id" value={user?.id} />
       <textarea
         ref={textareaRef}
@@ -34,15 +44,16 @@ export default function SendMessageForm({ user }: UserProps) {
         required
         value={text}
         onChange={handleChange}
-        className="px-3 py-2 rounded-md bg-slate-100 flex-1 resize-none min-h-[40px] max-h-[150px] overflow-hidden"
-        style={{ lineHeight: "1.5em" }}
+        className="px-3 py-2 rounded-md bg-slate-100 flex-1 resize-none min-h-[40px] max-h-[150px] overflow-hidden leading-relaxed  outline-0 focus:ring-2 focus:ring-blue-500 duration-100"
       />
       <button
         type="submit"
-        className="text-white bg-blue-600 px-4 py-2 rounded-md flex items-center justify-center min-h-[40px]"
-        disabled={isPending}
+        className={`text-white bg-blue-600 px-4 py-2 rounded-md flex items-center justify-center min-h-[40px] w-[50px]${
+          isLoading ? " opacity-50" : ""
+        }`}
+        disabled={isLoading}
       >
-        <Send />
+        {isLoading ? <Loader2 className="animate-spin h-5 w-5" /> : <Send />}
       </button>
     </form>
   );

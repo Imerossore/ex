@@ -1,7 +1,6 @@
 "use server";
 
 import { supabase } from "@/lib/supabase";
-import { revalidatePath } from "next/cache";
 
 export async function sendMessage(prevState: unknown, formData: FormData) {
   const text = formData.get("text") as string;
@@ -17,6 +16,5 @@ export async function sendMessage(prevState: unknown, formData: FormData) {
   }
   console.log("Message sent successfully");
 
-  revalidatePath("/home");
   return { success: true };
 }

@@ -83,7 +83,7 @@ export default function MessageContainer({ user }: UserProps) {
   };
 
   return (
-    <div className="h-96 w-full overflow-y-auto p-2 flex flex-col justify-end gap-2">
+    <div className="h-96 w-full overflow-y-auto p-2 flex flex-col gap-2 scrollbar-hidden">
       {messages.map((msg) => (
         <motion.div
           key={msg.id}
