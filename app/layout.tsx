@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Header from "./components/Header";
 import { getUser } from "./actions/auth";
-import { redirect } from "next/navigation";
+import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,10 +20,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
 
   return (
     <html lang="en">

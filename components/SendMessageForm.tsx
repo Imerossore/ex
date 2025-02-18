@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2, Send } from "lucide-react";
-import { sendMessage } from "../actions/message";
+import { sendMessage } from "../app/actions/message";
 import { useState, useRef } from "react";
 
 interface UserProps {

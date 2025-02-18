@@ -1,6 +1,7 @@
 "use client";
 
 import { signup } from "@/app/actions/auth";
+import { Loader2 } from "lucide-react";
 import { useActionState } from "react";
 
 export default function SignupPage() {
@@ -30,10 +31,10 @@ export default function SignupPage() {
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 disabled:bg-gray-400"
+          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 disabled:opacity-50 flex items-center justify-center "
           disabled={isPending}
         >
-          {isPending ? "Signing up..." : "Signup"}
+          {isPending ? <Loader2 className="animate-spin h-5 w-5" /> : "Signup"}
         </button>
       </form>
     </div>

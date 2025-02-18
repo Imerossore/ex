@@ -1,6 +1,6 @@
 import { getUser } from "@/app/actions/auth";
-import MessageContainer from "@/app/components/MessageContainer";
-import SendMessageForm from "@/app/components/SendMessageForm";
+import MessageContainer from "@/components/MessageContainer";
+import SendMessageForm from "@/components/SendMessageForm";
 
 export default async function HomePage() {
   const user = await getUser();
