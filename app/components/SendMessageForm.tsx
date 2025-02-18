@@ -10,8 +10,6 @@ interface UserProps {
 }
 
 export default function SendMessageForm({ user }: UserProps) {
-  const [, action] = useActionState(sendMessage, null);
-
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
