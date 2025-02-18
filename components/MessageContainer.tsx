@@ -75,7 +75,7 @@ export default function MessageContainer({ user }: UserProps) {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    if (messagesEndRef.current) scrollToBottom();
   }, [messages]);
 
   const scrollToBottom = () => {
