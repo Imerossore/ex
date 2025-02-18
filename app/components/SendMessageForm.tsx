@@ -10,7 +10,7 @@ interface UserProps {
 }
 
 export default function SendMessageForm({ user }: UserProps) {
-  const [, action, pending] = useActionState(sendMessage, null);
+  const [, action, isPending] = useActionState(sendMessage, null);
   const [text, setText] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -40,7 +40,7 @@ export default function SendMessageForm({ user }: UserProps) {
       <button
         type="submit"
         className="text-white bg-blue-600 px-4 py-2 rounded-md flex items-center justify-center min-h-[40px]"
-        disabled={pending}
+        disabled={isPending}
       >
         <Send />
       </button>

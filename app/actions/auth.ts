@@ -39,7 +39,7 @@ export async function signup(prevState: unknown, formData: FormData) {
     return { error: insertError.message };
   }
 
-  return { success: "User created successfully" };
+  redirect("/login");
 }
 
 export async function login(prevState: unknown, formData: FormData) {

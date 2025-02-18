@@ -8,7 +8,6 @@ export default function SignupPage() {
 
   return (
     <div>
-      {state?.success && <p style={{ color: "green" }}>{state.success}</p>}
       {state?.error && <p style={{ color: "red" }}>{state.error}</p>}
       <form action={action} className="flex flex-col gap-3">
         <input
