@@ -7,12 +7,17 @@ import { motion } from "framer-motion";
 interface Message {
   id: string;
   text: string;
-  sender: string;
+  user_Id: string;
   created_at: string;
 }
 
-export default function MessageContainer() {
+interface UserProps {
+  user?: { username: string; id: string } | null;
+}
+
+export default function MessageContainer({ user }: UserProps) {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [usernames, setUsernames] = useState<{ [key: string]: string }>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,7 +27,11 @@ export default function MessageContainer() {
         .select("*")
         .order("created_at", { ascending: true });
 
-      if (data) setMessages(data);
+      if (data) {
+        setMessages(data);
+        const userIds = data.map((msg) => msg.user_Id);
+        fetchUsernames(userIds);
+      }
       if (error) console.error("Error fetching messages:", error);
     };
 
@@ -33,8 +42,11 @@ export default function MessageContainer() {
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages" },
-        (payload) => {
-          setMessages((prev) => [...prev, payload.new as Message]);
+        async (payload) => {
+          const newMessage = payload.new as Message;
+          setMessages((prev) => [...prev, newMessage]);
+
+          await fetchUsernames([newMessage.user_Id]);
           scrollToBottom();
         }
       )
@@ -44,6 +56,23 @@ export default function MessageContainer() {
       supabase.removeChannel(subscription);
     };
   }, []);
+
+  const fetchUsernames = async (userIds: string[]) => {
+    const { data, error } = await supabase
+      .from("users")
+      .select("id, username")
+      .in("id", userIds);
+
+    if (data) {
+      const newUsernames = data.reduce((acc, user) => {
+        acc[user.id] = user.username;
+        return acc;
+      }, {} as { [key: string]: string });
+
+      setUsernames((prev) => ({ ...prev, ...newUsernames }));
+    }
+    if (error) console.error("Error fetching usernames:", error);
+  };
 
   useEffect(() => {
     scrollToBottom();
@@ -62,12 +91,17 @@ export default function MessageContainer() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
           className={`p-3 max-w-xs rounded-lg shadow-md text-sm ${
-            msg.sender === "User1"
+            msg.user_Id === user?.id
               ? "bg-blue-500 text-white self-end"
               : "bg-white text-gray-800 self-start"
           }`}
         >
-          {msg.text}
+          <p className="text-xs font-bold text-slate-50 ">
+            {msg.user_Id === user?.id
+              ? "You"
+              : usernames[msg.user_Id] || "Unknown"}
+          </p>
+          <p className="break-words ">{msg.text}</p>
         </motion.div>
       ))}
       <div ref={messagesEndRef} />

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import Header from "./components/Header";
+import { getUser } from "./actions/auth";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -12,14 +14,19 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getUser();
+
   return (
     <html lang="en">
-      <body className={poppins.className}>{children}</body>
+      <body className={`${poppins.className} flex flex-col h-[100vh]`}>
+        <Header user={user} />
+        <div className="flex-1">{children}</div>
+      </body>
     </html>
   );
 }
