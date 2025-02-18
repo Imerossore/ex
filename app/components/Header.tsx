@@ -2,8 +2,8 @@
 
 import { LogOut } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { getUser, logout } from "../actions/auth";
+import { usePathname } from "next/navigation";
+import { logout } from "../actions/auth";
 
 interface HeaderProps {
   user?: { username: string; id: string } | null;
